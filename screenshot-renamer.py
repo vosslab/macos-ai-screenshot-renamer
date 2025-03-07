@@ -145,8 +145,9 @@ def parse_args():
 	Parse command-line arguments.
 	"""
 	parser = argparse.ArgumentParser(description="Batch process images with step-by-step feedback.")
-	parser.add_argument("directory", nargs="?", default=os.path.expanduser("~/Desktop"),
-						help="Directory containing images (default: ~/Desktop)")
+	parser.add_argument("-d", "--directory", dest="directory", nargs="?",
+				default=os.path.expanduser("~/Desktop"),
+				help="Directory containing images (default: ~/Desktop)")
 	parser.add_argument("-n", "--dry-run", dest="dry_run", action="store_true",
 						help="Perform a dry run without modifying files.")
 	parser.add_argument("-t", "--unit-test", dest="unit_test", action="store_true",
