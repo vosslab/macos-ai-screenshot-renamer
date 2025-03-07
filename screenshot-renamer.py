@@ -133,6 +133,8 @@ def parse_args():
 						help="Directory containing images (default: ~/Desktop)")
 	parser.add_argument("-n", "--dry-run", dest="dry_run", action="store_true",
 						help="Perform a dry run without modifying files.")
+	parser.add_argument("-t", "--unit-test", dest="unit_test", action="store_true",
+						help="Run a unit test (ask LLM to add two numbers).")
 	args = parser.parse_args()
 	return args
 
@@ -142,6 +144,12 @@ def main():
 	Main function
 	"""
 	args = parse_args()
+
+	if args.unit_test:
+		import sys
+		from tools import config_ollama
+		config_ollama.unit_test()
+		sys.exit(0)
 
 	image_files = process_directory(args.directory)
 	image_files.sort()
