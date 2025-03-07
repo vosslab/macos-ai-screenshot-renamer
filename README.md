@@ -1,0 +1,1 @@
+# macos-ai-screenshot-renamer
