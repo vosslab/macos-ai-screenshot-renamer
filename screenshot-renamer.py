@@ -144,8 +144,14 @@ def main():
 	args = parse_args()
 
 	image_files = process_directory(args.directory)
+	image_files.sort()
 	if args.dry_run is True:
 		random.shuffle(image_files)
+	else:
+		image_files.sort(key=len)
+
+	for i, filename in enumerate(image_files, start=1):
+		print(f"{i:<3d}: {filename}")
 
 	ai_components = setup_ai_components()
 	for i, filename in enumerate(image_files, start=1):
