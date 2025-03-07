@@ -68,14 +68,12 @@ def pull_ollama_model(model_name):
 	Automatically pulls the required Ollama model if it is not available.
 	"""
 	print(f"Checking for model: {model_name}")
-	try:
-		output = subprocess.check_output(["ollama", "list"], text=True)
-		if model_name not in output:
-			print(f"Model {model_name} not found. Pulling now...")
-			subprocess.run(["ollama", "pull", model_name], check=True)
-			print(f"Successfully pulled model: {model_name}")
-		except Exception as e:
-			print(f"⚠Failed to pull model {model_name}: {e}")
+	output = subprocess.check_output(["ollama", "list"], text=True)
+	if model_name not in output:
+		print(f"Model {model_name} not found. Pulling now...")
+		subprocess.run(["ollama", "pull", model_name], check=True)
+		print(f"Successfully pulled model: {model_name}")
+
 
 #============================================
 # Select Ollama Model Based on VRAM
