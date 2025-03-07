@@ -6,6 +6,34 @@ import time
 from ollama import chat
 
 #============================================
+def is_ollama_running():
+	"""
+	Checks if the Ollama server is running.
+	"""
+	try:
+		output = subprocess.check_output(["pgrep", "ollama"], text=True).strip()
+		if output:
+			return True
+	except subprocess.CalledProcessError:
+		pass
+	return False
+
+#============================================
+def start_ollama_if_needed():
+	"""
+	Checks if Ollama is running and provides instructions if it's not.
+	"""
+	if not is_ollama_running():
+		print("\n⚠Ollama is not running! Start it with: `ollama serve`\n")
+		print("Attempting to start Ollama automatically...")
+		subprocess.Popen(["ollama", "serve"])
+		time.sleep(3)  # Give it some time to start
+		if is_ollama_running():
+			print("Ollama started successfully!")
+		else:
+			print("Failed to start Ollama. Please run `ollama serve` manually.")
+
+#============================================
 def get_vram_size_in_gb():
 	"""
 	Detects the available VRAM or unified memory in GB.
@@ -35,6 +63,21 @@ def get_vram_size_in_gb():
 	return None
 
 #============================================
+def pull_ollama_model(model_name):
+	"""
+	Automatically pulls the required Ollama model if it is not available.
+	"""
+	print(f"Checking for model: {model_name}")
+	try:
+		output = subprocess.check_output(["ollama", "list"], text=True)
+		if model_name not in output:
+			print(f"Model {model_name} not found. Pulling now...")
+			subprocess.run(["ollama", "pull", model_name], check=True)
+			print(f"Successfully pulled model: {model_name}")
+		except Exception as e:
+			print(f"⚠Failed to pull model {model_name}: {e}")
+
+#============================================
 # Select Ollama Model Based on VRAM
 vram_size_gb = get_vram_size_in_gb()
 MODEL_NAME = "llama3.2:1b-instruct-q4_K_M"  # Default
@@ -49,7 +92,11 @@ if vram_size_gb:
 
 print(f"Selected Ollama model: {MODEL_NAME}")
 
-#============================================
+# Ensure Ollama is running
+start_ollama_if_needed()
+# Ensure the model is pulled
+pull_ollama_model(MODEL_NAME)
+
 #============================================
 def unit_test():
 	"""
@@ -75,7 +122,6 @@ def unit_test():
 		print(f"SUCCESS! {num1} + {num2} = {ai_answer}")
 	else:
 		print(f"FAILED: Expected {expected_answer}, but got {ai_answer}")
-
 
 #============================================
 def run_ollama(prompt: str, model: str = MODEL_NAME) -> str:
