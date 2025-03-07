@@ -1,7 +1,8 @@
+einops
 ollama
 pillow
 pyexiftool
 pytesseract
-pyvips
+git+https://github.com/libvips/pyvips.git
 torch
 transformers
