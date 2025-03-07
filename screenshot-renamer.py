@@ -1,14 +1,25 @@
 #!/usr/bin/env python3
 
+import gc
 import os
 import time
 import random
 import argparse
 
+import torch
+
 from tools.extract_text import extract_text_from_image
 from tools.generate_caption import generate_caption, setup_ai_components
 from tools.intelligent_filename import generate_intelligent_filename
 from tools.update_metadata import write_exif_metadata
+
+
+def clear_gpu_memory():
+	"""Forcefully clears GPU memory after processing an image to prevent out-of-memory errors."""
+	gc.collect()  # Clean Python memory
+	if torch.backends.mps.is_available():
+		torch.mps.empty_cache()  # Clears MPS (Metal Performance Shaders) memory
+		#torch.cuda.empty_cache()  # Just in case some models use CUDA fallback
 
 #============================================
 def format_preview(text: str, max_lines: int = 2, line_length: int = 80) -> str:
@@ -95,6 +106,7 @@ def process_image(image_path: str, ai_components: dict, dry_run: bool):
 		metadata_time = time.time() - start_time
 		print(f"Renamed and updated metadata: '{filename}' -> '{new_filename}'")
 		print(f"Time taken for renaming and metadata update: {metadata_time:.2f} seconds")
+	clear_gpu_memory()
 
 #============================================
 def process_directory(directory: str):
