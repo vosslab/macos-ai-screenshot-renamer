@@ -22,7 +22,7 @@ If you haven't installed Homebrew yet, run:
 
 #### Install system dependencies (macOS):
 ```bash
-brew install ollama exiftool
+brew install ollama exiftool vips
 ```
 
 #### Install Python dependencies:
