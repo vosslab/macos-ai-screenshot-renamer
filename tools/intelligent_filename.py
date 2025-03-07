@@ -22,6 +22,7 @@ def generate_intelligent_filename(ocr_text: str, ai_caption: str) -> str:
 		"what the image might used for or its purpose or include something about its content "
 		"Prioritize clarity and distinctiveness while avoiding redundancy.\n\n"
 		"Format requirements:\n"
+		"- The first output is the just the filename\n"
 		"- Words must be separated by underscores (_)\n"
 		"- No filename extensions (e.g., .png)\n"
 		"- No full sentences\n"
