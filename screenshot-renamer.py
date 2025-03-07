@@ -159,7 +159,9 @@ def main():
 		image_files.sort(key=len)
 
 	for i, filename in enumerate(image_files, start=1):
-		print(f"{i:<3d}: {filename}")
+		if i > 9:
+			break
+		print(f"{i}: {filename}")
 
 	ai_components = setup_ai_components()
 	for i, filename in enumerate(image_files, start=1):
