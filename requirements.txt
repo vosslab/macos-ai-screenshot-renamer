@@ -1,6 +1,7 @@
-torch
+ollama
 pillow
-transformers
 pyexiftool
 pytesseract
-ollama
+pyvips
+torch
+transformers
