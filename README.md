@@ -1,11 +1,5 @@
 # macOS AI Screenshot Renamer
 
-This README provides setup instructions, installation steps, and how to run the program.
-
----
-
-## 🚀 macOS AI Screenshot Renamer
-
 A Python script that extracts text, generates AI captions, and intelligently renames macOS screenshots using OCR and LLMs.
 
 ---
