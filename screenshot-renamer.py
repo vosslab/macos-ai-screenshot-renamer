@@ -70,20 +70,27 @@ def process_image(image_path: str, ai_components: dict, dry_run: bool):
 	print('='* 60)
 	print(f"Processing image: {filename}")
 
+	print("\nStarting OCR...")
 	start_time = time.time()
 	ocr_text = extract_text_from_image(image_path)
 	ocr_time = time.time() - start_time
-	print(f"\nOCR Results:\n{format_preview(ocr_text)}")
+	print(f"OCR Results:\n{format_preview(ocr_text)}")
 	print(f"Time taken for OCR: {ocr_time:.2f} seconds")
 
+	print("\nStarting Caption...")
 	start_time = time.time()
 	ai_caption = generate_caption(image_path, ai_components)
 	caption_time = time.time() - start_time
-	print(f"\nCaption Results:\n{format_preview(ai_caption)}")
+	print(f"Caption Results:\n{format_preview(ai_caption)}")
 	print(f"Time taken for caption generation: {caption_time:.2f} seconds")
+	clear_gpu_memory()
 
+	print("\nStarting Get AI Filename with LLM...")
 	start_time = time.time()
 	new_filename = generate_intelligent_filename(ocr_text, ai_caption)
+	print(f"AI Filename Result: {new_filename}")
+	print(f"Time taken for filename generation: {filename_time:.2f} seconds")
+	clear_gpu_memory()
 
 	# Correctly extract only the date from the filename
 	match = re.search(r"(\d{4}-\d{2}-\d{2})", filename, re.IGNORECASE)
@@ -94,8 +101,6 @@ def process_image(image_path: str, ai_components: dict, dry_run: bool):
 
 	filename_time = time.time() - start_time
 	new_path = os.path.join(os.path.dirname(image_path), new_filename)
-	print(f"\nAI Filename Result: {new_filename}")
-	print(f"Time taken for filename generation: {filename_time:.2f} seconds")
 
 	if dry_run:
 		print(f"Dry Run: Would rename '{filename}' -> '{new_filename}'")
@@ -106,7 +111,6 @@ def process_image(image_path: str, ai_components: dict, dry_run: bool):
 		metadata_time = time.time() - start_time
 		print(f"Renamed and updated metadata: '{filename}' -> '{new_filename}'")
 		print(f"Time taken for renaming and metadata update: {metadata_time:.2f} seconds")
-	clear_gpu_memory()
 
 #============================================
 def process_directory(directory: str):
