@@ -160,6 +160,7 @@ def main():
 
 	for i, filename in enumerate(image_files, start=1):
 		if i > 9:
+			print(f"... plus {len(image_files)-9} more files")
 			break
 		print(f"{i}: {filename}")
 
